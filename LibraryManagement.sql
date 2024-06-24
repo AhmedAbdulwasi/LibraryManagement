@@ -8,7 +8,7 @@ CREATE TABLE users (
 
 CREATE TABLE books (
 	book_id INTEGER PRIMARY KEY AUTOINCREMENT,
-	user_id INTEGER NOT NULL,
+	user_id INTEGER,
 	title TEXT NOT NULL,
     author TEXT NOT NULL,
     isbn TEXT NOT NULL UNIQUE,
@@ -20,6 +20,7 @@ CREATE TABLE books (
 CREATE TABLE borrowings (
     borrowing_id INTEGER PRIMARY KEY AUTOINCREMENT,
     book_id INTEGER NOT NULL,
+    user_id INTEGER,
     borrowed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     due_at TIMESTAMP NOT NULL,
     returned_at TIMESTAMP,
@@ -32,18 +33,18 @@ INSERT INTO users (username, email, password, created_at) VALUES
 ('BillNye', 'biil.n@hotmail.com', 'password123', '2024-01-03 12:00:00');
 
 INSERT INTO books (user_id, title, author, isbn, publisher, year, available) VALUES 
-(2,'The Great Gatsby', 'F. Scott Fitzgerald', '9780743273565', 'Charles Scribners Sons', 1925, TRUE),
-(2,'1984', 'George Orwell', '9780451524935', 'Secker & Warburg', 1949, TRUE),
-(1,'To Kill a Mockingbird', 'Harper Lee', '9780061120084', 'J.B. Lippincott & Co.', 1960, TRUE),
-(3,'Moby Dick', 'Herman Melville', '9781503280786', 'Richard Bentley', 1851, TRUE),
-(3,'War and Peace', 'Leo Tolstoy', '9780199232765', 'The Russian Messenger', 1869, TRUE);
+(2,'The Great Gatsby', 'F. Scott Fitzgerald', '9780743273565', 'Charles Scribners Sons', 1925, FALSE),
+(2,'1984', 'George Orwell', '9780451524935', 'Secker & Warburg', 1949, FALSE),
+(1,'To Kill a Mockingbird', 'Harper Lee', '9780061120084', 'J.B. Lippincott & Co.', 1960, FALSE),
+(3,'Moby Dick', 'Herman Melville', '9781503280786', 'Richard Bentley', 1851, FALSE),
+(3,'War and Peace', 'Leo Tolstoy', '9780199232765', 'The Russian Messenger', 1869, FALSE);
 
-INSERT INTO borrowings (book_id, borrowed_at, due_at, returned_at) VALUES 
-(1,'2024-02-01 10:00:00', '2024-02-15 10:00:00', NULL),
-(2,'2024-02-02 11:00:00', '2024-02-16 11:00:00', NULL),
-(3,'2024-02-03 12:00:00', '2024-02-17 12:00:00', NULL),
-(4,'2024-02-04 13:00:00', '2024-02-18 13:00:00', NULL),
-(5,'2024-02-05 14:00:00', '2024-02-19 14:00:00', NULL);
+INSERT INTO borrowings (user_id,book_id, borrowed_at, due_at, returned_at) VALUES 
+(2,1,'2024-02-01 10:00:00', '2024-02-15 10:00:00', NULL),
+(2,2,'2024-02-02 11:00:00', '2024-02-16 11:00:00', NULL),
+(1,3,'2024-02-03 12:00:00', '2024-02-17 12:00:00', NULL),
+(3,4,'2024-02-04 13:00:00', '2024-02-18 13:00:00', NULL),
+(3,5,'2024-02-05 14:00:00', '2024-02-19 14:00:00', NULL);
 
 -- Add new users and Select user's email and username and group by email
 INSERT INTO users (username, email, password, created_at) VALUES
@@ -74,4 +75,9 @@ FROM books b
 WHERE author = 'Herman Melville'
 ORDER BY year DESC;
 
+-- List all users who have borrowed books along with the book titles they borrowed.
 
+SELECT u.username, u.email, bk.title
+FROM borrowings b
+JOIN users u ON b.user_id = u.user_id
+JOIN books bk ON b.book_id = bk.book_id;
