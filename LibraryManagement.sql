@@ -37,14 +37,14 @@ INSERT INTO books (user_id, title, author, isbn, publisher, year, available) VAL
 (2,'1984', 'George Orwell', '9780451524935', 'Secker & Warburg', 1949, FALSE),
 (1,'To Kill a Mockingbird', 'Harper Lee', '9780061120084', 'J.B. Lippincott & Co.', 1960, FALSE),
 (3,'Moby Dick', 'Herman Melville', '9781503280786', 'Richard Bentley', 1851, FALSE),
-(3,'War and Peace', 'Leo Tolstoy', '9780199232765', 'The Russian Messenger', 1869, FALSE);
+(3,'War and Peace', 'Leo Tolstoy', '9780199232765', 'The Russian Messenger', 1869, TRUE);
 
 INSERT INTO borrowings (user_id,book_id, borrowed_at, due_at, returned_at) VALUES 
 (2,1,'2024-02-01 10:00:00', '2024-02-15 10:00:00', NULL),
 (2,2,'2024-02-02 11:00:00', '2024-02-16 11:00:00', NULL),
 (1,3,'2024-02-03 12:00:00', '2024-02-17 12:00:00', NULL),
 (3,4,'2024-02-04 13:00:00', '2024-02-18 13:00:00', NULL),
-(3,5,'2024-02-05 14:00:00', '2024-02-19 14:00:00', NULL);
+(3,5,'2024-02-05 14:00:00', '2024-02-19 14:00:00', '2024-02-16 13:00:00');
 
 -- Add new users and Select user's email and username and group by email
 INSERT INTO users (username, email, password, created_at) VALUES
@@ -77,7 +77,14 @@ ORDER BY year DESC;
 
 -- List all users who have borrowed books along with the book titles they borrowed.
 
-SELECT u.username, u.email, bk.title
+SELECT u.username AS Username, u.email AS Email, bk.title AS Title
 FROM borrowings b
 JOIN users u ON b.user_id = u.user_id
 JOIN books bk ON b.book_id = bk.book_id;
+
+-- List all books that are currently borrowed (not yet returned).
+
+SELECT bk.title AS Title, bk.author AS Author, bk.year AS Year
+FROM borrowings b
+JOIN books bk ON b.book_id = bk.book_id
+WHERE b.returned_at IS NULL;
