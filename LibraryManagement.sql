@@ -1,15 +1,15 @@
 CREATE TABLE users (
-    user_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT NOT NULL UNIQUE,
-    email TEXT NOT NULL UNIQUE,
-    password TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+	user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+	username TEXT NOT NULL UNIQUE,
+	email TEXT NOT NULL UNIQUE,
+	password TEXT NOT NULL,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE books (
-    book_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER,
-    title TEXT NOT NULL,
+	book_id INTEGER PRIMARY KEY AUTOINCREMENT,
+	user_id INTEGER,
+	title TEXT NOT NULL,
     author TEXT NOT NULL,
     isbn TEXT NOT NULL UNIQUE,
     publisher TEXT NOT NULL,
@@ -46,7 +46,7 @@ INSERT INTO borrowings (user_id,book_id, borrowed_at, due_at, returned_at) VALUE
 (3,4,'2024-02-04 13:00:00', '2024-02-18 13:00:00', NULL),
 (3,5,'2024-02-05 14:00:00', '2024-02-19 14:00:00', '2024-02-16 13:00:00');
 
--- Add new users and Select user's email and username and group by email
+-- Add new users and Select user's email and username and group by email.
 INSERT INTO users (username, email, password, created_at) VALUES
 ('AlexTheFax', 'aalex@gmail.com', 'alexthepassword', '2024-01-06 09:00:00'),
 ('Callus', 'zallus@gmail.com', 'zallus', '2024-01-05 10:00:00');
@@ -55,10 +55,10 @@ SELECT email AS EMAIL, username AS USERNAME
 FROM users u
 GROUP BY email;
 
--- List all books
+-- List all books.
 SELECT * from books;
 
--- Number of Books by author (add some books as well)
+-- Number of Books by author (add some books as well).
 
 INSERT INTO books (user_id, title, author, isbn, publisher, year, available) VALUES 
 (4,'Anna Karenina', 'Leo Tolstoy', '9780075536321', 'The Russian Messenger', 1878, TRUE),
@@ -68,7 +68,7 @@ SELECT author AS AUTHORS, COUNT(*) AS BOOK_COUNT
 FROM books
 GROUP BY author;
 
--- Find a book by a specific author. Say Herman Melville (Make sure its ordered by the year in a descending order)
+-- Find a book by a specific author. Say Herman Melville (Make sure its ordered by the year in a descending order).
 
 SELECT *
 FROM books b
@@ -88,3 +88,12 @@ SELECT bk.title AS Title, bk.author AS Author, bk.year AS Year
 FROM borrowings b
 JOIN books bk ON b.book_id = bk.book_id
 WHERE b.returned_at IS NULL;
+
+-- List all overdue books along with the borrower's information. Assume today's date is '2024-03-01'.
+
+
+SELECT u.username AS Username, u.email AS Email, bk.title AS Title, bk.isbn AS ISBN, due_at AS Due_Date
+FROM borrowings b 
+JOIN users u ON u.user_id = b.user_id
+JOIN books bk ON bk.book_id = b.book_id
+WHERE due_at < '2024-03-01';
