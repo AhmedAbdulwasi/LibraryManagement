@@ -10,21 +10,21 @@ CREATE TABLE books (
 	book_id INTEGER PRIMARY KEY AUTOINCREMENT,
 	user_id INTEGER,
 	title TEXT NOT NULL,
-    	author TEXT NOT NULL,
-    	isbn TEXT NOT NULL UNIQUE,
-    	publisher TEXT NOT NULL,
-    	year INTEGER NOT NULL,
-    	available BOOLEAN DEFAULT TRUE
+    author TEXT NOT NULL,
+    isbn TEXT NOT NULL UNIQUE,
+    publisher TEXT NOT NULL,
+    year INTEGER NOT NULL,
+    available BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE borrowings (
-    	borrowing_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    	book_id INTEGER NOT NULL,
-    	user_id INTEGER,
-    	borrowed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    	due_at TIMESTAMP NOT NULL,
-    	returned_at TIMESTAMP,
-    	FOREIGN KEY (book_id) REFERENCES books(book_id)
+    borrowing_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    book_id INTEGER NOT NULL,
+    user_id INTEGER,
+    borrowed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    due_at TIMESTAMP NOT NULL,
+    returned_at TIMESTAMP,
+    FOREIGN KEY (book_id) REFERENCES books(book_id)
 );
 
 INSERT INTO users (username, email, password, created_at) VALUES 
@@ -97,3 +97,10 @@ FROM borrowings b
 JOIN users u ON u.user_id = b.user_id
 JOIN books bk ON bk.book_id = b.book_id
 WHERE due_at < '2024-03-01';
+
+-- List books that are currently borrowed by 'AhmedB'
+SELECT u.username AS Username, bk.title AS TITLE, due_at AS Due_Date
+FROM borrowings b 
+JOIN users u ON u.user_id = b.user_id
+JOIN books bk ON bk.book_id = b.book_id
+WHERE u.username = 'AhmedB';
