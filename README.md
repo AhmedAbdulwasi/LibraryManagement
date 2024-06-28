@@ -1,5 +1,5 @@
-# Library Database (SQL)
-Just A Library Database that I created for me to practice my SQL skills.
+# Library Management System (SQL)
+Just A Library Database I created to practice my SQL skills.
 
 
 ## Why?
