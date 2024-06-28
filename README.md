@@ -1,4 +1,4 @@
-# Library Management System (SQL)
+# Library Management System
 Just A Library Database I created to practice my SQL skills.
 
 
