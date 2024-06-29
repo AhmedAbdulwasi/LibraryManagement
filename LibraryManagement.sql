@@ -58,6 +58,9 @@ GROUP BY email;
 -- List all books.
 SELECT * from books;
 
+-- List all borrowings info.
+SELECT * from borrowings;
+
 -- Number of Books by author (add some books as well).
 
 INSERT INTO books (user_id, title, author, isbn, publisher, year, available) VALUES 
