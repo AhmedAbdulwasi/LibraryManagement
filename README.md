@@ -7,5 +7,3 @@ I'm too focused on Java and Python to the point where I started to forget some S
 
 ## Languages and Technologies
 - SQL (SQLite)
-- Dbeaver
-
